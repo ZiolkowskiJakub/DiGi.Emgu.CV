@@ -6,7 +6,7 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
-        public static double ColorHistogramsFactor(this Mat mat_1, Mat mat_2)
+        public static double ColorHistogramFactor(this Mat mat_1, Mat mat_2)
         {
             if(mat_1 == null || mat_2 == null)
             {
