@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 using System.Drawing;
 
 namespace DiGi.Emgu.CV
@@ -11,7 +12,7 @@ namespace DiGi.Emgu.CV
             minValue = double.NaN;
             maxValue = double.NaN;
 
-            if(mat_Target == null || mat_Template == null)
+            if (mat_Target == null || mat_Template == null)
             {
                 return false;
             }
