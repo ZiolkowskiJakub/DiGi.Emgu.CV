@@ -1,6 +1,5 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
 using System.Drawing;
 
 namespace DiGi.Emgu.CV
@@ -17,10 +16,12 @@ namespace DiGi.Emgu.CV
                 return false;
             }
 
-            Mat mat = new Mat();
-            CvInvoke.MatchTemplate(mat_Target, mat_Template, mat, TemplateMatchingType.CcorrNormed);
+            using (Mat mat = new Mat())
+            {
+                CvInvoke.MatchTemplate(mat_Target, mat_Template, mat, TemplateMatchingType.CcorrNormed);
 
-            CvInvoke.MinMaxLoc(mat, ref minValue, ref maxValue, ref minPoint, ref maxPoint);
+                CvInvoke.MinMaxLoc(mat, ref minValue, ref maxValue, ref minPoint, ref maxPoint);
+            }
 
             return true;
         }

@@ -8,20 +8,20 @@ namespace DiGi.Emgu.CV
     {
         public static void LaplacianFactors(this Mat mat, out double mean, out double standardDeviation)
         {
-            Mat gray1 = new Mat();
+            using (Mat gray1 = new Mat())
+            using (Mat noise = new Mat())
+            {
+                CvInvoke.CvtColor(mat, gray1, ColorConversion.Bgr2Gray);
+                CvInvoke.Laplacian(mat, noise, DepthType.Cv64F);
 
-            CvInvoke.CvtColor(mat, gray1, ColorConversion.Bgr2Gray);
+                MCvScalar mCvScalar_Mean = new MCvScalar();
+                MCvScalar MCvScalar_StandardDeviation = new MCvScalar();
 
-            Mat noise = new Mat();
-            CvInvoke.Laplacian(mat, noise, DepthType.Cv64F);
+                CvInvoke.MeanStdDev(noise, ref mCvScalar_Mean, ref MCvScalar_StandardDeviation);
 
-            MCvScalar mCvScalar_Mean = new MCvScalar();
-            MCvScalar MCvScalar_StandardDeviation = new MCvScalar();
-
-            CvInvoke.MeanStdDev(noise, ref mCvScalar_Mean, ref MCvScalar_StandardDeviation);
-
-            mean = mCvScalar_Mean.V0;
-            standardDeviation = MCvScalar_StandardDeviation.V0;
+                mean = mCvScalar_Mean.V0;
+                standardDeviation = MCvScalar_StandardDeviation.V0;
+            }
         }
 
         public static void LaplacianFactors(this Mat mat_1, Mat mat_2, out double mean, out double standardDeviation)

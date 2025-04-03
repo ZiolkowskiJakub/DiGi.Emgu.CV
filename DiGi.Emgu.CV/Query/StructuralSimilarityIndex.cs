@@ -14,17 +14,19 @@ namespace DiGi.Emgu.CV
                 return double.NaN;
             }
 
-            Mat mat_gray_1 = new Mat();
-            CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
+            using (Mat mat_gray_1 = new Mat())
+            using (Mat mat_gray_2 = new Mat())
+            using (Mat absDiff = new Mat())
+            {
+                CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
+                CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
+                CvInvoke.AbsDiff(mat_gray_1, mat_gray_2, absDiff);
 
-            Mat mat_gray_2 = new Mat();
-            CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
+                MCvScalar mean = CvInvoke.Mean(absDiff);
+                return 1.0 - (mean.V0 / 255.0);
+            }
 
-            Mat absDiff = new Mat();
-            CvInvoke.AbsDiff(mat_gray_1, mat_gray_2, absDiff);
 
-            MCvScalar mean = CvInvoke.Mean(absDiff);
-            return 1.0 - (mean.V0 / 255.0);
         }
 
         public static double StructuralSimilarityIndex_MatchTemplate(this Mat mat_1, Mat mat_2)
@@ -34,17 +36,19 @@ namespace DiGi.Emgu.CV
                 return double.NaN;
             }
 
-            Mat mat_gray_1 = new Mat();
-            CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
+            using (Mat mat_gray_1 = new Mat())
+            using (Mat mat_gray_2 = new Mat())
+            using (Mat mat_diff = new Mat())
+            {
+                CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
 
-            Mat mat_gray_2 = new Mat();
-            CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
+                CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
 
-            Mat mat_diff = new Mat();
-            CvInvoke.MatchTemplate(mat_gray_1, mat_gray_2, mat_diff, TemplateMatchingType.CcorrNormed);
+                CvInvoke.MatchTemplate(mat_gray_1, mat_gray_2, mat_diff, TemplateMatchingType.CcorrNormed);
 
-            MCvScalar mean = CvInvoke.Mean(mat_diff);
-            return 1.0 - (mean.V0 / 255.0);
+                MCvScalar mean = CvInvoke.Mean(mat_diff);
+                return 1.0 - (mean.V0 / 255.0);
+            }
         }
     }
 }
