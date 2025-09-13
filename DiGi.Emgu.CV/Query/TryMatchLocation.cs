@@ -6,7 +6,7 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
-        public static bool TryMatchLocation(this Mat mat_Target, Mat mat_Template, out double minValue, out double maxValue, out Point minPoint, out Point maxPoint)
+        public static bool TryMatchLocation(this Mat? mat_Target, Mat? mat_Template, out double minValue, out double maxValue, out Point minPoint, out Point maxPoint)
         {
             minValue = double.NaN;
             maxValue = double.NaN;
@@ -16,12 +16,11 @@ namespace DiGi.Emgu.CV
                 return false;
             }
 
-            using (Mat mat = new Mat())
-            {
-                CvInvoke.MatchTemplate(mat_Target, mat_Template, mat, TemplateMatchingType.CcorrNormed);
+            using Mat mat = new ();
 
-                CvInvoke.MinMaxLoc(mat, ref minValue, ref maxValue, ref minPoint, ref maxPoint);
-            }
+            CvInvoke.MatchTemplate(mat_Target, mat_Template, mat, TemplateMatchingType.CcorrNormed);
+
+            CvInvoke.MinMaxLoc(mat, ref minValue, ref maxValue, ref minPoint, ref maxPoint);
 
             return true;
         }

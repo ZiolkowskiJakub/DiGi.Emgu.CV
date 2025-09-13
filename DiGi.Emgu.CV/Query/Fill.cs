@@ -5,7 +5,6 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -13,15 +12,15 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
-        public static Mat Fill(this Mat mat, IPolygonal2D polygonal2D, Color color, bool invert = false)
+        public static Mat? Fill(this Mat? mat, IPolygonal2D? polygonal2D, Color color, bool invert = false)
         {
-            List<Point2D> point2Ds = polygonal2D?.GetPoints();
+            List<Point2D>? point2Ds = polygonal2D?.GetPoints();
             if(point2Ds == null)
             {
                 return null;
             }
 
-            List<Point> points = new List<Point>();
+            List<Point> points = [];
             foreach(Point2D point2D in point2Ds)
             {
                 Point? point = point2D?.ToDrawing_Point();
@@ -38,10 +37,10 @@ namespace DiGi.Emgu.CV
                 return null;
             }
 
-            return Fill(mat, points.ToArray(), color.ToEmguCV(), invert);
+            return Fill(mat, [.. points], color.ToEmguCV(), invert);
         }
 
-        public static Mat Fill(this Mat mat, Point[] points, MCvScalar mCvScalar, bool invert = false)
+        public static Mat? Fill(this Mat? mat, Point[]? points, MCvScalar mCvScalar, bool invert = false)
         {
             if (mat == null || points == null || points.Length < 3)
             {
@@ -49,56 +48,45 @@ namespace DiGi.Emgu.CV
             }
 
             // Create a mask of the same size as the input Mat
-            using (Mat mask = new Mat(mat.Size, DepthType.Cv8U, 1))
+            using Mat mask = new (mat.Size, DepthType.Cv8U, 1);
+            mask.SetTo(new MCvScalar(0)); // Initialize the mask as black
+
+            // Convert the polygon points to a VectorOfPoint
+            using (var vectorOfPoint = new VectorOfPoint(points))
             {
-                mask.SetTo(new MCvScalar(0)); // Initialize the mask as black
-
-                // Convert the polygon points to a VectorOfPoint
-                using (var vectorOfPoint = new VectorOfPoint(points))
-                {
-                    // Fill the polygon with white (255) on the mask
-                    CvInvoke.FillConvexPoly(mask, vectorOfPoint, new MCvScalar(255));
-                }
-
-                // If invert is true, invert the mask
-                if (invert)
-                {
-                    CvInvoke.BitwiseNot(mask, mask);
-                }
-
-                // Create a colored Mat filled with the specified MCvScalar color
-                using (Mat coloredMat = new Mat(mat.Size, mat.Depth, mat.NumberOfChannels))
-                {
-                    coloredMat.SetTo(mCvScalar);
-
-                    // Apply the mask to the colored Mat
-                    using (Mat maskedColor = new Mat())
-                    {
-                        CvInvoke.BitwiseAnd(coloredMat, coloredMat, maskedColor, mask);
-
-                        // Apply the inverted mask to the original image to keep the rest of the image
-                        using (Mat inverseMask = new Mat())
-                        {
-                            CvInvoke.BitwiseNot(mask, inverseMask);
-
-                            using (Mat maskedOriginal = new Mat())
-                            {
-                                CvInvoke.BitwiseAnd(mat, mat, maskedOriginal, inverseMask);
-
-                                // Combine the colored region with the masked original
-                                Mat result = new Mat();
-                                CvInvoke.Add(maskedColor, maskedOriginal, result);
-
-                                return result;
-                            }
-
-                        }
-
-                    }
-
-                }
-
+                // Fill the polygon with white (255) on the mask
+                CvInvoke.FillConvexPoly(mask, vectorOfPoint, new MCvScalar(255));
             }
+
+            // If invert is true, invert the mask
+            if (invert)
+            {
+                CvInvoke.BitwiseNot(mask, mask);
+            }
+
+            // Create a colored Mat filled with the specified MCvScalar color
+            using Mat coloredMat = new (mat.Size, mat.Depth, mat.NumberOfChannels);
+            coloredMat.SetTo(mCvScalar);
+
+            // Apply the mask to the colored Mat
+            using Mat maskedColor = new ();
+
+            CvInvoke.BitwiseAnd(coloredMat, coloredMat, maskedColor, mask);
+
+            // Apply the inverted mask to the original image to keep the rest of the image
+            using Mat inverseMask = new ();
+
+            CvInvoke.BitwiseNot(mask, inverseMask);
+
+            using Mat maskedOriginal = new ();
+
+            CvInvoke.BitwiseAnd(mat, mat, maskedOriginal, inverseMask);
+
+            // Combine the colored region with the masked original
+            Mat result = new ();
+            CvInvoke.Add(maskedColor, maskedOriginal, result);
+
+            return result;
 
         }
     }
