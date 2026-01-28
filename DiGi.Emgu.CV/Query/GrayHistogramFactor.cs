@@ -14,8 +14,8 @@ namespace DiGi.Emgu.CV
             }
 
             // Convert input Mats to grayscale
-            using Mat gray1 = new ();
-            using Mat gray2 = new ();
+            using Mat gray1 = new();
+            using Mat gray2 = new();
 
             CvInvoke.CvtColor(mat_1, gray1, ColorConversion.Bgr2Gray);
             CvInvoke.CvtColor(mat_2, gray2, ColorConversion.Bgr2Gray);
@@ -30,7 +30,7 @@ namespace DiGi.Emgu.CV
             float[] ranges = [0, 256]; // Intensity range
 
             // Use VectorOfMat to wrap the grayscale Mats
-            using (VectorOfMat vectorOfMat_1 = new ())
+            using (VectorOfMat vectorOfMat_1 = new())
             {
                 using VectorOfMat vectorOfMat_2 = new();
 
@@ -48,7 +48,6 @@ namespace DiGi.Emgu.CV
 
             // Compare histograms using correlation
             return CvInvoke.CompareHist(hist1, hist2, HistogramCompMethod.Correl);
-
         }
     }
 }

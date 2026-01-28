@@ -3,7 +3,6 @@ using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using System.Collections.Generic;
 
-
 namespace DiGi.Emgu.CV
 {
     public static partial class Query
@@ -21,7 +20,7 @@ namespace DiGi.Emgu.CV
             }
 
             // Convert the Mat to grayscale
-            using Mat mat_gray_1 = new ();
+            using Mat mat_gray_1 = new();
 
             CvInvoke.CvtColor(mat, mat_gray_1, ColorConversion.Bgr2Gray);
 
@@ -59,26 +58,26 @@ namespace DiGi.Emgu.CV
                 return null;
             }
 
-            using GpuMat gpuMat = new (mat);
-            using GpuMat gpuGray = new ();
-            using GpuMat gpuMask = new ();
+            using GpuMat gpuMat = new(mat);
+            using GpuMat gpuGray = new();
+            using GpuMat gpuMask = new();
 
             // Convert to grayscale on GPU
             CudaInvoke.CvtColor(gpuMat, gpuGray, ColorConversion.Bgr2Gray);
 
             // Downscale image for fast mean calculation
-            using GpuMat gpuSmall = new ();
+            using GpuMat gpuSmall = new();
 
             CudaInvoke.Resize(gpuGray, gpuSmall, new System.Drawing.Size(8, 8)); // Reduce size for fast mean
-            
-            using Mat smallMat = new ();
+
+            using Mat smallMat = new();
             gpuSmall.Download(smallMat); // Transfer small image to CPU
 
             double mean = CvInvoke.Mean(smallMat).V0; // Compute mean on CPU
             CudaInvoke.Threshold(gpuGray, gpuMask, mean, 255, ThresholdType.Binary); // Thresholding
 
             // Download the mask to CPU
-            using Mat maskMat = new ();
+            using Mat maskMat = new();
 
             gpuMask.Download(maskMat);
 

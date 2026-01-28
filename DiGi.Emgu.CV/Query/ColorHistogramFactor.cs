@@ -20,7 +20,7 @@ namespace DiGi.Emgu.CV
             }
 
             // Convert to HSV (or another color space if needed)
-            using Mat hsvImage_1 = new ();
+            using Mat hsvImage_1 = new();
 
             CvInvoke.CvtColor(mat_1, hsvImage_1, ColorConversion.Bgr2Hsv);
 
@@ -28,22 +28,22 @@ namespace DiGi.Emgu.CV
             using VectorOfMat hsvChannels_1 = new();
             CvInvoke.Split(hsvImage_1, hsvChannels_1);
 
-            using Mat hist1 = new ();
-            
+            using Mat hist1 = new();
+
             CvInvoke.CalcHist(new VectorOfMat(hsvChannels_1[0]), [0], null, hist1, [256], [0, 256], false);
 
             // Normalize the histogram
             CvInvoke.Normalize(hist1, hist1, 0, 1, NormType.MinMax);
 
             // Convert to HSV (or another color space if needed)
-            using Mat hsvImage_2 = new ();
+            using Mat hsvImage_2 = new();
             CvInvoke.CvtColor(mat_2, hsvImage_2, ColorConversion.Bgr2Hsv);
 
             // Calculate histograms
-            using VectorOfMat hsvChannels_2 = new ();
+            using VectorOfMat hsvChannels_2 = new();
             CvInvoke.Split(hsvImage_2, hsvChannels_2);
 
-            using Mat hist2 = new ();
+            using Mat hist2 = new();
 
             CvInvoke.CalcHist(new VectorOfMat(hsvChannels_1[0]), [0], null, hist2, [256], [0, 256], false);
 
@@ -60,11 +60,11 @@ namespace DiGi.Emgu.CV
                 return double.NaN;
             }
 
-            using GpuMat gpuMat1 = new (mat_1);
-            using GpuMat gpuMat2 = new (mat_2);
-            using GpuMat gpuHsvImage1 = new (), gpuHsvImage2 = new ();
-            using VectorOfGpuMat gpuChannels1 = new (), gpuChannels2 = new ();
-            using GpuMat hist1 = new (), hist2 = new ();
+            using GpuMat gpuMat1 = new(mat_1);
+            using GpuMat gpuMat2 = new(mat_2);
+            using GpuMat gpuHsvImage1 = new(), gpuHsvImage2 = new();
+            using VectorOfGpuMat gpuChannels1 = new(), gpuChannels2 = new();
+            using GpuMat hist1 = new(), hist2 = new();
 
             // Convert to HSV on GPU
             CudaInvoke.CvtColor(gpuMat1, gpuHsvImage1, ColorConversion.Bgr2Hsv);

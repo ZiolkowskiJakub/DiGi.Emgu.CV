@@ -14,7 +14,7 @@ namespace DiGi.Emgu.CV
 
         public static double ColorDistributionShift_CPU(this Mat? mat_1, Mat? mat_2)
         {
-            if(mat_1 == null || mat_2 == null)
+            if (mat_1 == null || mat_2 == null)
             {
                 return double.NaN;
             }
@@ -36,10 +36,10 @@ namespace DiGi.Emgu.CV
                 return double.NaN;
             }
 
-            using GpuMat gpuMat1 = new (mat_1);
-            using GpuMat gpuMat2 = new (mat_2);
-            using GpuMat gpuReduced1 = new ();
-            using GpuMat gpuReduced2 = new ();
+            using GpuMat gpuMat1 = new(mat_1);
+            using GpuMat gpuMat2 = new(mat_2);
+            using GpuMat gpuReduced1 = new();
+            using GpuMat gpuReduced2 = new();
 
             // Resize images to speed up mean computation
             CudaInvoke.Resize(gpuMat1, gpuReduced1, new System.Drawing.Size(8, 8));

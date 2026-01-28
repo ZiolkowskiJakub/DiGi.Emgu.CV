@@ -16,7 +16,7 @@ namespace DiGi.Emgu.CV
                 return false;
             }
 
-            using Mat mat = new ();
+            using Mat mat = new();
 
             CvInvoke.MatchTemplate(mat_Target, mat_Template, mat, TemplateMatchingType.CcorrNormed);
 

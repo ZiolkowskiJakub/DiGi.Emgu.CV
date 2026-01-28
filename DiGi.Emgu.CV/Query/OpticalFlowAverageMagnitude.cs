@@ -32,7 +32,7 @@ namespace DiGi.Emgu.CV
             CvInvoke.CalcOpticalFlowFarneback(gray1, gray2, flow, 0.5, 3, 15, 3, 5, 1.2, OpticalflowFarnebackFlag.Default);
 
             // Get flow data as an array
-            if(flow.GetData(false) is not float[] data)
+            if (flow.GetData(false) is not float[] data)
             {
                 return double.NaN;
             }
@@ -64,20 +64,20 @@ namespace DiGi.Emgu.CV
                 return double.NaN;
             }
 
-            using GpuMat gpuGray1 = new ();
-            using GpuMat gpuGray2 = new ();
-            using GpuMat gpuFlow = new ();
+            using GpuMat gpuGray1 = new();
+            using GpuMat gpuGray2 = new();
+            using GpuMat gpuFlow = new();
 
             // Convert images to grayscale on GPU
-            using (GpuMat gpuMat1 = new (mat_1))
-            using (GpuMat gpuMat2 = new (mat_2))
+            using (GpuMat gpuMat1 = new(mat_1))
+            using (GpuMat gpuMat2 = new(mat_2))
             {
                 CudaInvoke.CvtColor(gpuMat1, gpuGray1, ColorConversion.Bgr2Gray);
                 CudaInvoke.CvtColor(gpuMat2, gpuGray2, ColorConversion.Bgr2Gray);
             }
 
             // Compute optical flow using CUDA Farneback method
-            using (CudaFarnebackOpticalFlow farneback = new (3, 0.5, false, 15, 3, 5, 1.2))
+            using (CudaFarnebackOpticalFlow farneback = new(3, 0.5, false, 15, 3, 5, 1.2))
             {
                 farneback.Calc(gpuGray1, gpuGray2, gpuFlow);
             }
@@ -85,7 +85,7 @@ namespace DiGi.Emgu.CV
             float[]? data = null;
 
             // Download results to CPU
-            using (Mat flow = new ())
+            using (Mat flow = new())
             {
                 gpuFlow.Download(flow);
 

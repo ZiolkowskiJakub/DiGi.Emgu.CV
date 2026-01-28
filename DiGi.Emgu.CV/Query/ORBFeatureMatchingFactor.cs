@@ -22,25 +22,25 @@ namespace DiGi.Emgu.CV
             }
 
             // Convert the original Mat to grayscale
-            using Mat mat_gray_1 = new ();
-            using Mat mat_gray_2 = new ();
+            using Mat mat_gray_1 = new();
+            using Mat mat_gray_2 = new();
 
             CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
             CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
 
             // Convert to UMat
-            using UMat uMat_1 = new ();
-            using UMat uMat_2 = new ();
+            using UMat uMat_1 = new();
+            using UMat uMat_2 = new();
 
             mat_gray_1.CopyTo(uMat_1);
             mat_gray_2.CopyTo(uMat_2);
 
             // Detect ORB keypoints and descriptors
-            using ORB orb = new ();
-            using VectorOfKeyPoint keyPoints_1 = new ();
-            using VectorOfKeyPoint keyPoints_2 = new ();
-            using Mat descriptors_1 = new ();
-            using Mat descriptors_2 = new ();
+            using ORB orb = new();
+            using VectorOfKeyPoint keyPoints_1 = new();
+            using VectorOfKeyPoint keyPoints_2 = new();
+            using Mat descriptors_1 = new();
+            using Mat descriptors_2 = new();
 
             orb.DetectAndCompute(uMat_1, null, keyPoints_1, descriptors_1, false);
             orb.DetectAndCompute(uMat_2, null, keyPoints_2, descriptors_2, false);
@@ -63,14 +63,13 @@ namespace DiGi.Emgu.CV
             }
 
             // Match features using Brute-Force Matcher
-            using BFMatcher matcher = new (DistanceType.Hamming);
-            using VectorOfDMatch matches = new ();
+            using BFMatcher matcher = new(DistanceType.Hamming);
+            using VectorOfDMatch matches = new();
 
             matcher.Match(descriptors_1, descriptors_2, matches);
 
             // Compute the average match distance
             return matches.ToArray().Average(m => m.Distance); // Lower distance = better match
-
         }
 
         public static double ORBFeatureMatchingFactor_GPU(this Mat? mat_1, Mat? mat_2)
@@ -81,15 +80,15 @@ namespace DiGi.Emgu.CV
             }
 
             // Convert the original Mat to grayscale
-            using Mat mat_gray_1 = new ();
-            using Mat mat_gray_2 = new ();
+            using Mat mat_gray_1 = new();
+            using Mat mat_gray_2 = new();
 
             CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
 
             CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
 
             // Detect ORB keypoints and descriptors on CPU
-            using ORB orb = new ();
+            using ORB orb = new();
             using VectorOfKeyPoint keyPoints_1 = new();
             using VectorOfKeyPoint keyPoints_2 = new();
             using Mat descriptors_1 = new();
@@ -120,8 +119,8 @@ namespace DiGi.Emgu.CV
             using GpuMat gpuDescriptors_2 = new(descriptors_2);
 
             // Use CudaBFMatcher for feature matching (GPU)
-            using CudaBFMatcher gpuMatcher = new (DistanceType.Hamming);
-            using VectorOfDMatch matches = new ();
+            using CudaBFMatcher gpuMatcher = new(DistanceType.Hamming);
+            using VectorOfDMatch matches = new();
 
             // Match descriptors on GPU
             gpuMatcher.Match(gpuDescriptors_1, gpuDescriptors_2, matches);
@@ -133,7 +132,6 @@ namespace DiGi.Emgu.CV
                 return averageDistance; // Lower distance = better match
             }
             return double.NaN; // No matches found
-
         }
     }
 }

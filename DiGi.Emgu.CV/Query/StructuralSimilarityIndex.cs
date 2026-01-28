@@ -8,14 +8,14 @@ namespace DiGi.Emgu.CV
     {
         public static double StructuralSimilarityIndex_AbsoluteDifference(this Mat? mat_1, Mat? mat_2)
         {
-            if(mat_1 == null || mat_2 == null)
+            if (mat_1 == null || mat_2 == null)
             {
                 return double.NaN;
             }
 
-            using Mat mat_gray_1 = new ();
-            using Mat mat_gray_2 = new ();
-            using Mat absDiff = new ();
+            using Mat mat_gray_1 = new();
+            using Mat mat_gray_2 = new();
+            using Mat absDiff = new();
 
             CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
             CvInvoke.CvtColor(mat_2, mat_gray_2, ColorConversion.Bgr2Gray);
@@ -23,8 +23,6 @@ namespace DiGi.Emgu.CV
 
             MCvScalar mean = CvInvoke.Mean(absDiff);
             return 1.0 - (mean.V0 / 255.0);
-
-
         }
 
         public static double StructuralSimilarityIndex_MatchTemplate(this Mat? mat_1, Mat? mat_2)
@@ -34,9 +32,9 @@ namespace DiGi.Emgu.CV
                 return double.NaN;
             }
 
-            using Mat mat_gray_1 = new ();
-            using Mat mat_gray_2 = new ();
-            using Mat mat_diff = new ();
+            using Mat mat_gray_1 = new();
+            using Mat mat_gray_2 = new();
+            using Mat mat_diff = new();
 
             CvInvoke.CvtColor(mat_1, mat_gray_1, ColorConversion.Bgr2Gray);
 

@@ -9,7 +9,4 @@ namespace DiGi.Emgu.CV
             return new MCvScalar(color.B, color.G, color.R);
         }
     }
-
 }
-
-

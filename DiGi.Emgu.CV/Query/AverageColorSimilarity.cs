@@ -28,7 +28,6 @@ namespace DiGi.Emgu.CV
                 Math.Pow(avgColor_1.V1 - avgColor_2.V1, 2) +
                 Math.Pow(avgColor_1.V2 - avgColor_2.V2, 2)
             );
-
         }
 
         public static double AverageColorSimilarity_GPU(Mat? mat_1, Mat? mat_2)
@@ -48,8 +47,8 @@ namespace DiGi.Emgu.CV
             CudaInvoke.Resize(gpuMat2, gpuReduced2, new System.Drawing.Size(8, 8));
 
             // Download reduced images to CPU
-            using Mat reducedMat1 = new ();
-            using Mat reducedMat2 = new ();
+            using Mat reducedMat1 = new();
+            using Mat reducedMat2 = new();
 
             gpuReduced1.Download(reducedMat1);
             gpuReduced2.Download(reducedMat2);

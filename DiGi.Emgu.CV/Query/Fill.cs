@@ -15,16 +15,16 @@ namespace DiGi.Emgu.CV
         public static Mat? Fill(this Mat? mat, IPolygonal2D? polygonal2D, Color color, bool invert = false)
         {
             List<Point2D>? point2Ds = polygonal2D?.GetPoints();
-            if(point2Ds == null)
+            if (point2Ds == null)
             {
                 return null;
             }
 
             List<Point> points = [];
-            foreach(Point2D point2D in point2Ds)
+            foreach (Point2D point2D in point2Ds)
             {
                 Point? point = point2D?.ToDrawing_Point();
-                if(point == null || !point.HasValue)
+                if (point == null || !point.HasValue)
                 {
                     continue;
                 }
@@ -32,7 +32,7 @@ namespace DiGi.Emgu.CV
                 points.Add(point.Value);
             }
 
-            if(points == null || points.Count < 3)
+            if (points == null || points.Count < 3)
             {
                 return null;
             }
@@ -48,7 +48,7 @@ namespace DiGi.Emgu.CV
             }
 
             // Create a mask of the same size as the input Mat
-            using Mat mask = new (mat.Size, DepthType.Cv8U, 1);
+            using Mat mask = new(mat.Size, DepthType.Cv8U, 1);
             mask.SetTo(new MCvScalar(0)); // Initialize the mask as black
 
             // Convert the polygon points to a VectorOfPoint
@@ -65,29 +65,28 @@ namespace DiGi.Emgu.CV
             }
 
             // Create a colored Mat filled with the specified MCvScalar color
-            using Mat coloredMat = new (mat.Size, mat.Depth, mat.NumberOfChannels);
+            using Mat coloredMat = new(mat.Size, mat.Depth, mat.NumberOfChannels);
             coloredMat.SetTo(mCvScalar);
 
             // Apply the mask to the colored Mat
-            using Mat maskedColor = new ();
+            using Mat maskedColor = new();
 
             CvInvoke.BitwiseAnd(coloredMat, coloredMat, maskedColor, mask);
 
             // Apply the inverted mask to the original image to keep the rest of the image
-            using Mat inverseMask = new ();
+            using Mat inverseMask = new();
 
             CvInvoke.BitwiseNot(mask, inverseMask);
 
-            using Mat maskedOriginal = new ();
+            using Mat maskedOriginal = new();
 
             CvInvoke.BitwiseAnd(mat, mat, maskedOriginal, inverseMask);
 
             // Combine the colored region with the masked original
-            Mat result = new ();
+            Mat result = new();
             CvInvoke.Add(maskedColor, maskedOriginal, result);
 
             return result;
-
         }
     }
 }

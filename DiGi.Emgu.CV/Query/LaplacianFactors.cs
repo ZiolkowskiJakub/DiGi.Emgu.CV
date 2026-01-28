@@ -14,8 +14,8 @@ namespace DiGi.Emgu.CV
             CvInvoke.CvtColor(mat, gray1, ColorConversion.Bgr2Gray);
             CvInvoke.Laplacian(mat, noise, DepthType.Cv64F);
 
-            MCvScalar mCvScalar_Mean = new ();
-            MCvScalar MCvScalar_StandardDeviation = new ();
+            MCvScalar mCvScalar_Mean = new();
+            MCvScalar MCvScalar_StandardDeviation = new();
 
             CvInvoke.MeanStdDev(noise, ref mCvScalar_Mean, ref MCvScalar_StandardDeviation);
 
@@ -40,7 +40,7 @@ namespace DiGi.Emgu.CV
                 return;
             }
 
-            if(!double.IsNaN(mean_1) && !double.IsNaN(mean_2))
+            if (!double.IsNaN(mean_1) && !double.IsNaN(mean_2))
             {
                 mean = mean_2 == 0 ? 0 : mean_1 / mean_2;
             }
