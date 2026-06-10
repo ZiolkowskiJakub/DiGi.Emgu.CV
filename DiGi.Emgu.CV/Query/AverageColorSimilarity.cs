@@ -7,11 +7,23 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the average color similarity between two images, automatically selecting the GPU or CPU implementation based on CUDA availability.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>The Euclidean distance between the average colors of the two images, or <see cref="double.NaN"/> if either input is null.</returns>
         public static double AverageColorSimilarity(this Mat? mat_1, Mat? mat_2)
         {
             return CudaInvoke.HasCuda ? AverageColorSimilarity_GPU(mat_1, mat_2) : AverageColorSimilarity_CPU(mat_1, mat_2);
         }
 
+        /// <summary>
+        /// Calculates the average color similarity between two images using the CPU implementation.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>The Euclidean distance between the average colors of the two images, or <see cref="double.NaN"/> if either input is null.</returns>
         public static double AverageColorSimilarity_CPU(this Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null)
@@ -30,6 +42,12 @@ namespace DiGi.Emgu.CV
             );
         }
 
+        /// <summary>
+        /// Calculates the average color similarity between two images using the GPU implementation for acceleration.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>The Euclidean distance between the average colors of the two images, or <see cref="double.NaN"/> if either input is null or CUDA is unavailable.</returns>
         public static double AverageColorSimilarity_GPU(Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null || !CudaInvoke.HasCuda)

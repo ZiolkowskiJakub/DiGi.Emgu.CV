@@ -7,11 +7,25 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the average magnitude of optical flow between two images, automatically selecting 
+        /// between GPU and CPU implementations based on CUDA availability.
+        /// </summary>
+        /// <param name="mat_1">The first input image.</param>
+        /// <param name="mat_2">The second input image.</param>
+        /// <returns>The average magnitude of the optical flow vectors.</returns>
         public static double OpticalFlowAverageMagnitude(Mat? mat_1, Mat? mat_2)
         {
             return CudaInvoke.HasCuda ? OpticalFlowAverageMagnitude_GPU(mat_1, mat_2) : OpticalFlowAverageMagnitude_CPU(mat_1, mat_2);
         }
 
+        /// <summary>
+        /// Calculates the average magnitude of optical flow between two images using the CPU-based 
+        /// Farneback method.
+        /// </summary>
+        /// <param name="mat_1">The first input image.</param>
+        /// <param name="mat_2">The second input image.</param>
+        /// <returns>The average magnitude of the optical flow vectors, or <see cref="double.NaN"/> if either input image is null.</returns>
         public static double OpticalFlowAverageMagnitude_CPU(Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null)
@@ -57,6 +71,13 @@ namespace DiGi.Emgu.CV
             return count > 0 ? totalMagnitude / count : 0.0;
         }
 
+        /// <summary>
+        /// Calculates the average magnitude of optical flow between two images using the GPU-accelerated 
+        /// Farneback method via CUDA.
+        /// </summary>
+        /// <param name="mat_1">The first input image.</param>
+        /// <param name="mat_2">The second input image.</param>
+        /// <returns>The average magnitude of the optical flow vectors, or <see cref="double.NaN"/> if either input image is null or CUDA is not available.</returns>
         public static double OpticalFlowAverageMagnitude_GPU(Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null || !CudaInvoke.HasCuda)

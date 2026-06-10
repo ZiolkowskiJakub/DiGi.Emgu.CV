@@ -12,6 +12,14 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Fills a polygonal area within the specified image with a given color.
+        /// </summary>
+        /// <param name="mat">The source image to be filled.</param>
+        /// <param name="polygonal2D">The polygonal shape defining the area to fill.</param>
+        /// <param name="color">The color used for filling.</param>
+        /// <param name="invert">A flag indicating whether to invert the mask, filling the area outside the polygon instead of inside.</param>
+        /// <returns>A new image with the filled area, or null if the source image is null or the polygonal shape contains fewer than three valid points.</returns>
         public static Mat? Fill(this Mat? mat, IPolygonal2D? polygonal2D, Color color, bool invert = false)
         {
             List<Point2D>? point2Ds = polygonal2D?.GetPoints();
@@ -40,6 +48,14 @@ namespace DiGi.Emgu.CV
             return Fill(mat, [.. points], color.ToEmguCV(), invert);
         }
 
+        /// <summary>
+        /// Fills a convex polygonal area defined by an array of points within the specified image with a given MCvScalar color.
+        /// </summary>
+        /// <param name="mat">The source image to be filled.</param>
+        /// <param name="points">An array of points defining the vertices of the polygon.</param>
+        /// <param name="mCvScalar">The Emgu CV scalar color used for filling.</param>
+        /// <param name="invert">A flag indicating whether to invert the mask, filling the area outside the polygon instead of inside.</param>
+        /// <returns>A new image with the filled area, or null if the source image is null or the points array contains fewer than three points.</returns>
         public static Mat? Fill(this Mat? mat, Point[]? points, MCvScalar mCvScalar, bool invert = false)
         {
             if (mat == null || points == null || points.Length < 3)

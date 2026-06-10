@@ -6,6 +6,12 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the mean and standard deviation of the Laplacian of the specified matrix.
+        /// </summary>
+        /// <param name="mat">The input matrix to process.</param>
+        /// <param name="mean">When this method returns, contains the calculated mean value.</param>
+        /// <param name="standardDeviation">When this method returns, contains the calculated standard deviation value.</param>
         public static void LaplacianFactors(this Mat? mat, out double mean, out double standardDeviation)
         {
             using Mat gray1 = new();
@@ -23,6 +29,13 @@ namespace DiGi.Emgu.CV
             standardDeviation = MCvScalar_StandardDeviation.V0;
         }
 
+        /// <summary>
+        /// Calculates the ratio of Laplacian factors between two specified matrices.
+        /// </summary>
+        /// <param name="mat_1">The first input matrix.</param>
+        /// <param name="mat_2">The second input matrix used as the divisor for the ratio.</param>
+        /// <param name="mean">When this method returns, contains the ratio of the means of the two matrices.</param>
+        /// <param name="standardDeviation">When this method returns, contains the ratio of the standard deviations of the two matrices.</param>
         public static void LaplacianFactors(this Mat? mat_1, Mat? mat_2, out double mean, out double standardDeviation)
         {
             mean = double.NaN;

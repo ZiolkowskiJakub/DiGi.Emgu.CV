@@ -7,11 +7,24 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the color histogram similarity factor between two images, automatically selecting 
+        /// between GPU and CPU implementations based on CUDA availability.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>A double value representing the correlation similarity between the two histograms.</returns>
         public static double ColorHistogramFactor(this Mat? mat_1, Mat? mat_2)
         {
             return CudaInvoke.HasCuda ? ColorHistogramFactor_GPU(mat_1, mat_2) : ColorHistogramFactor_CPU(mat_1, mat_2);
         }
 
+        /// <summary>
+        /// Calculates the color histogram similarity factor between two images using the CPU.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>A double value representing the correlation similarity, or <see cref="double.NaN"/> if either input matrix is null.</returns>
         public static double ColorHistogramFactor_CPU(this Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null)
@@ -53,6 +66,12 @@ namespace DiGi.Emgu.CV
             return CvInvoke.CompareHist(hist1, hist2, HistogramCompMethod.Correl); // Correlation similarity
         }
 
+        /// <summary>
+        /// Calculates the color histogram similarity factor between two images using the GPU via CUDA.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>A double value representing the correlation similarity, or <see cref="double.NaN"/> if either input matrix is null or CUDA is not available.</returns>
         public static double ColorHistogramFactor_GPU(this Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null || !CudaInvoke.HasCuda)

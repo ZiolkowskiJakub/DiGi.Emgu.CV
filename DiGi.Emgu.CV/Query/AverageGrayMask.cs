@@ -7,11 +7,21 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Generates a binary mask based on the average gray intensity of the provided image, automatically selecting between GPU and CPU implementations.
+        /// </summary>
+        /// <param name="mat">The input image matrix to process.</param>
+        /// <returns>A boolean array representing the mask where true indicates pixels above the mean intensity, or null if the input is null.</returns>
         public static bool[]? AverageGrayMask(this Mat? mat)
         {
             return CudaInvoke.HasCuda ? AverageGrayMask_GPU(mat) : AverageGrayMask_CPU(mat);
         }
 
+        /// <summary>
+        /// Generates a binary mask based on the average gray intensity of the provided image using CPU processing.
+        /// </summary>
+        /// <param name="mat">The input image matrix to process.</param>
+        /// <returns>A boolean array representing the mask where true indicates pixels above the mean intensity, or null if the input is null.</returns>
         public static bool[]? AverageGrayMask_CPU(this Mat? mat)
         {
             if (mat == null)
@@ -51,6 +61,11 @@ namespace DiGi.Emgu.CV
             return [.. mask];
         }
 
+        /// <summary>
+        /// Generates a binary mask based on the average gray intensity of the provided image using GPU acceleration via CUDA.
+        /// </summary>
+        /// <param name="mat">The input image matrix to process.</param>
+        /// <returns>A boolean array representing the mask where true indicates pixels above the mean intensity, or null if the input is null or CUDA is unavailable.</returns>
         public static bool[]? AverageGrayMask_GPU(Mat? mat)
         {
             if (mat == null || !CudaInvoke.HasCuda)

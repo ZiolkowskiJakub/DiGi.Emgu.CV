@@ -6,6 +6,13 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the correlation between the hue histograms of two images.
+        /// </summary>
+        /// <param name="mat_1">The first input image matrix.</param>
+        /// <param name="mat_2">The second input image matrix.</param>
+        /// <param name="accumulate">A flag indicating whether to accumulate the histogram.</param>
+        /// <returns>The correlation value between the two histograms, or <see cref="double.NaN"/> if either input matrix is null.</returns>
         public static double HistogramCorrelation(this Mat? mat_1, Mat? mat_2, bool accumulate)
         {
             if (mat_1 == null || mat_2 == null)

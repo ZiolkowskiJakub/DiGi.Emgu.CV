@@ -7,11 +7,23 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the color distribution shift between two images, automatically selecting between GPU and CPU implementations based on CUDA availability.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>The Euclidean distance between the mean colors of the two images, or <see cref="double.NaN"/> if inputs are invalid.</returns>
         public static double ColorDistributionShift(this Mat? mat_1, Mat? mat_2)
         {
             return CudaInvoke.HasCuda ? ColorDistributionShift_GPU(mat_1, mat_2) : ColorDistributionShift_CPU(mat_1, mat_2);
         }
 
+        /// <summary>
+        /// Calculates the color distribution shift between two images using CPU processing.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>The Euclidean distance between the mean colors of the two images, or <see cref="double.NaN"/> if either input is null.</returns>
         public static double ColorDistributionShift_CPU(this Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null)
@@ -29,6 +41,12 @@ namespace DiGi.Emgu.CV
             );
         }
 
+        /// <summary>
+        /// Calculates the color distribution shift between two images using GPU acceleration via CUDA.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix.</param>
+        /// <param name="mat_2">The second image matrix.</param>
+        /// <returns>The Euclidean distance between the mean colors of the two images, or <see cref="double.NaN"/> if either input is null or CUDA is unavailable.</returns>
         public static double ColorDistributionShift_GPU(Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null || !CudaInvoke.HasCuda)

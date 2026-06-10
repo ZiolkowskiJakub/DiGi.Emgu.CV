@@ -54,6 +54,14 @@ namespace DiGi.Emgu.CV
         //    return huMoments_1.Zip(huMoments_2, (a, b) => Math.Abs(a - b)).Sum();
         //}
 
+        /// <summary>
+        /// Calculates a shape comparison factor between two image matrices using Canny edge detection and Hu Moments.
+        /// </summary>
+        /// <param name="mat_1">The first source image matrix.</param>
+        /// <param name="mat_2">The second source image matrix to compare against the first.</param>
+        /// <param name="threshold_1">The lower threshold for the Canny edge detection algorithm.</param>
+        /// <param name="threshold_2">The upper threshold for the Canny edge detection algorithm.</param>
+        /// <returns>A double value representing the sum of absolute differences between the Hu Moments of the primary contours; returns <see cref="double.NaN"/> if either input matrix is null or no contours are detected in either image.</returns>
         public static double ShapeComparisonFactor(this Mat? mat_1, Mat? mat_2, double threshold_1 = 100, double threshold_2 = 200)
         {
             if (mat_1 == null || mat_2 == null)

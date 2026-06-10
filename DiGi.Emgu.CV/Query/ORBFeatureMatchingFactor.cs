@@ -9,11 +9,24 @@ namespace DiGi.Emgu.CV
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Calculates the ORB feature matching factor between two images, automatically selecting 
+        /// between CPU and GPU implementations based on CUDA availability.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix to compare.</param>
+        /// <param name="mat_2">The second image matrix to compare.</param>
+        /// <returns>The average distance of the feature matches; a lower value indicates a better match. Returns <see cref="System.Double.NaN"/> if matching cannot be performed.</returns>
         public static double ORBFeatureMatchingFactor(this Mat? mat_1, Mat? mat_2)
         {
             return CudaInvoke.HasCuda ? ORBFeatureMatchingFactor_CPU(mat_1, mat_2) : ORBFeatureMatchingFactor_CPU(mat_1, mat_2);
         }
 
+        /// <summary>
+        /// Calculates the ORB feature matching factor between two images using the CPU.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix to compare.</param>
+        /// <param name="mat_2">The second image matrix to compare.</param>
+        /// <returns>The average distance of the feature matches; a lower value indicates a better match. Returns <see cref="System.Double.NaN"/> if either input is null or no descriptors are found.</returns>
         public static double ORBFeatureMatchingFactor_CPU(this Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null)
@@ -72,6 +85,12 @@ namespace DiGi.Emgu.CV
             return matches.ToArray().Average(m => m.Distance); // Lower distance = better match
         }
 
+        /// <summary>
+        /// Calculates the ORB feature matching factor between two images using the GPU via CUDA.
+        /// </summary>
+        /// <param name="mat_1">The first image matrix to compare.</param>
+        /// <param name="mat_2">The second image matrix to compare.</param>
+        /// <returns>The average distance of the feature matches; a lower value indicates a better match. Returns <see cref="System.Double.NaN"/> if CUDA is unavailable, inputs are null, or no matches are found.</returns>
         public static double ORBFeatureMatchingFactor_GPU(this Mat? mat_1, Mat? mat_2)
         {
             if (mat_1 == null || mat_2 == null || !CudaInvoke.HasCuda)
